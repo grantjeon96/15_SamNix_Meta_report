@@ -399,6 +399,257 @@
       color: #fdba74;
       border: 1px solid rgba(249, 115, 22, 0.2);
     }
+
+    /* Viewer Layout */
+    .viewer-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 30px;
+      margin-bottom: 40px;
+      height: 680px;
+    }
+    
+    @media (max-width: 1100px) {
+      .viewer-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+    
+    .list-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .search-box {
+      margin-bottom: 20px;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .search-box input:focus {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+    }
+    
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+    
+    .chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+    
+    .chip.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+    }
+    
+    .report-cards-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-right: 4px;
+    }
+    
+    /* Scrollbar */
+    .report-cards-container::-webkit-scrollbar,
+    .table-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .report-cards-container::-webkit-scrollbar-track,
+    .table-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .report-cards-container::-webkit-scrollbar-thumb,
+    .table-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+    }
+    
+    .report-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+    
+    .report-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      transition: background-color 0.3s ease;
+    }
+    
+    .report-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(4px);
+    }
+    
+    .report-card.active {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .report-card.active::before {
+      background: linear-gradient(to bottom, var(--samsung-blue), var(--hynix-orange));
+    }
+    
+    .report-meta-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .report-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .report-card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    
+    .report-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    
+    /* PDF Panel */
+    .pdf-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .pdf-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+    
+    .pdf-header span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+    
+    .download-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    
+    .download-action-btn:hover {
+      background: var(--samsung-blue);
+      color: white;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+    
+    .pdf-viewer-container {
+      flex: 1;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      position: relative;
+      min-height: 500px;
+    }
+    
+    .pdf-viewer-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .no-pdf-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      color: var(--text-muted);
+      width: 80%;
+    }
+    
+    .no-pdf-placeholder p {
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
@@ -419,6 +670,7 @@
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchPage('scatter')">컨센서스 산점도 분석</button>
       <button class="tab-btn" onclick="switchPage('timeline')">역사적 가격 궤적 분석 (2025-2026)</button>
+      <button class="tab-btn" onclick="switchPage('viewer')">실물 리포트 PDF 뷰어</button>
     </div>
 
     <!-- PAGE 1: SCATTER PLOT PAGE -->
@@ -565,6 +817,55 @@
 
     </div>
 
+    <!-- PAGE 3: PDF VIEWER PAGE -->
+    <div id="page-viewer" class="page-section">
+      <div class="viewer-layout">
+        <!-- Left: Report List & Search -->
+        <div class="glass-card list-panel">
+          <h2 class="section-title"><span></span>인용 리포트 원본 목록</h2>
+          <div class="search-box">
+            <input type="text" id="report-search" placeholder="리포트 제목, 기관 또는 키워드 입력..." oninput="filterReports()">
+            <div class="filter-chips">
+              <button class="chip active" onclick="filterType('all', this)">전체</button>
+              <button class="chip" onclick="filterType('samsung', this)">삼성전자</button>
+              <button class="chip" onclick="filterType('hynix', this)">SK하이닉스</button>
+              <button class="chip" onclick="filterType('strategy', this)">산업/전략</button>
+            </div>
+          </div>
+          <div class="report-cards-container" id="report-list">
+            <!-- Dynamically injected cards -->
+          </div>
+        </div>
+        
+        <!-- Right: Embedded PDF Viewer -->
+        <div class="glass-card pdf-panel">
+          <div class="pdf-header">
+            <span id="active-report-title">선택된 리포트가 없습니다</span>
+            <a href="#" id="pdf-download-btn" class="download-action-btn" download style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              다운로드
+            </a>
+          </div>
+          <div class="pdf-viewer-container" id="pdf-frame-wrapper">
+            <div class="no-pdf-placeholder">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 2V8H20" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 13H8" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17H8" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 9H8" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p>왼쪽 목록에서 리포트를 선택하시면 여기에 바로 표시됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -656,10 +957,14 @@
         document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
         document.getElementById('page-scatter').classList.add('active');
         setTimeout(initScatterChart, 50); // Give time for rendering
-      } else {
+      } else if (page === 'timeline') {
         document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
         document.getElementById('page-timeline').classList.add('active');
         setTimeout(initTimelineChart, 50);
+      } else if (page === 'viewer') {
+        document.querySelector('.tab-btn:nth-child(3)').classList.add('active');
+        document.getElementById('page-viewer').classList.add('active');
+        renderReportsList();
       }
     }
 
@@ -1129,6 +1434,121 @@
       });
 
       renderTimelineData();
+    }
+
+    // Reports Data for Viewer
+    const reportsList = [
+      {
+        id: 'samsung-mirae',
+        title: '삼성전자 - 메모리 슈퍼사이클의 정점은 어디인가',
+        date: '2026-05-27',
+        company: 'samsung',
+        category: 'samsung',
+        brokerage: '미래에셋증권',
+        filePath: 'reports/Samsung_MiraeAsset_20260527.pdf',
+        description: '삼성전자의 2분기 잠정 실적 리뷰 및 하반기 HBM4 퀄테스트 전망. 범용 DRAM의 공급 제한 시나리오 하에서 연간 영업이익 추정치를 371.4조 원으로 상향 조정하고 목표주가를 55만 원으로 산정했습니다.'
+      },
+      {
+        id: 'hynix-mirae',
+        title: 'SK하이닉스 - HBM4 선도적 지위 견고',
+        date: '2026-05-27',
+        company: 'hynix',
+        category: 'hynix',
+        brokerage: '미래에셋증권',
+        filePath: 'reports/SKHynix_MiraeAsset_20260527.pdf',
+        description: 'SK하이닉스의 HBM 공급 계약 구조 분석 및 글로벌 낸드 사업 턴어라운드 전망. 2026년 영업이익을 289.6조 원으로 산정하고 목표주가를 380만 원으로 상향 조정했습니다.'
+      },
+      {
+        id: 'strategy-mirae',
+        title: 'Semiconductor - Ready for Re-rating',
+        date: '2026-05-22',
+        company: 'strategy',
+        category: 'strategy',
+        brokerage: '미래에셋증권',
+        filePath: 'reports/Semiconductor_Strategy_MiraeAsset_20260522.pdf',
+        description: '2026년 하반기 글로벌 IT 하드웨어 및 반도체 업종 투자 전략 리포트. 글로벌 AI 데이터센터 건설 수급 밸런스와 이에 따른 D램 가격 사이클 장기화 요인을 분석하여 밸류에이션 리레이팅 정당성을 제안합니다.'
+      },
+      {
+        id: 'china-mirae',
+        title: 'China Tech - 중국 반도체 굴기와 레거시 공정 분석',
+        date: '2026-05-22',
+        company: 'china',
+        category: 'strategy',
+        brokerage: '미래에셋증권',
+        filePath: 'reports/China_Tech_MiraeAsset_20260522.pdf',
+        description: '중국 반도체 기업들(CXMT, SMIC)의 미국 규제 우회 생산 동향 및 레거시 DRAM 공급 과잉 리스크 점검. 글로벌 메모리 공급망 내 국내 2사(삼성, 하이닉스)의 고부가가치 제품 차별화 필요성을 강조합니다.'
+      }
+    ];
+
+    let currentFilterType = 'all';
+    let searchQuery = '';
+
+    function renderReportsList() {
+      const container = document.getElementById('report-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filtered = reportsList.filter(report => {
+        const matchesType = currentFilterType === 'all' || report.category === currentFilterType;
+        const matchesSearch = report.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              report.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              report.brokerage.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesType && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 40px 0;">검색 결과와 일치하는 리포트가 없습니다.</div>';
+        return;
+      }
+
+      filtered.forEach(report => {
+        const card = document.createElement('div');
+        card.className = 'report-card';
+        card.id = `card-${report.id}`;
+        card.onclick = () => selectReport(report.id);
+
+        card.innerHTML = `
+          <div class="report-meta-line">
+            <span class="badge" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: var(--text-main);">${report.brokerage}</span>
+            <span class="report-date">${report.date}</span>
+          </div>
+          <div class="report-card-title">${report.title}</div>
+          <div class="report-card-desc">${report.description}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterType(type, element) {
+      currentFilterType = type;
+      document.querySelectorAll('.filter-chips .chip').forEach(chip => chip.classList.remove('active'));
+      element.classList.add('active');
+      renderReportsList();
+    }
+
+    function filterReports() {
+      const input = document.getElementById('report-search');
+      if (input) {
+        searchQuery = input.value;
+        renderReportsList();
+      }
+    }
+
+    function selectReport(reportId) {
+      document.querySelectorAll('.report-card').forEach(card => card.classList.remove('active'));
+      const activeCard = document.getElementById(`card-${reportId}`);
+      if (activeCard) activeCard.classList.add('active');
+
+      const report = reportsList.find(r => r.id === reportId);
+      if (!report) return;
+
+      document.getElementById('active-report-title').innerText = report.title;
+      const downloadBtn = document.getElementById('pdf-download-btn');
+      downloadBtn.href = report.filePath;
+      downloadBtn.style.display = 'inline-flex';
+
+      const viewerContainer = document.getElementById('pdf-frame-wrapper');
+      viewerContainer.innerHTML = `<iframe src="${report.filePath}" title="${report.title}"></iframe>`;
     }
 
     // Initialize Page load
