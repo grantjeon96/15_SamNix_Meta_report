@@ -1169,17 +1169,19 @@
       // Update Summary Cards
       const xValues = dataset.map(d => d.x);
       const yValues = dataset.map(d => d.y);
-      const avgX = (xValues.reduce((a,b) => a+b, 0) / xValues.length).toFixed(1);
+      const avgXRaw = xValues.reduce((a,b) => a+b, 0) / xValues.length;
+      const avgX = Math.round(avgXRaw * 10) / 10;
       const avgY = Math.round(yValues.reduce((a,b) => a+b, 0) / yValues.length);
       const maxY = Math.max(...yValues);
       
       const prevXValues = dataset.map(d => d.prevX !== undefined ? d.prevX : d.x);
       const prevYValues = dataset.map(d => d.prevY !== undefined ? d.prevY : d.y);
-      const prevAvgX = (prevXValues.reduce((a,b) => a+b, 0) / prevXValues.length).toFixed(1);
+      const prevAvgXRaw = prevXValues.reduce((a,b) => a+b, 0) / prevXValues.length;
+      const prevAvgX = Math.round(prevAvgXRaw * 10) / 10;
       const prevAvgY = Math.round(prevYValues.reduce((a,b) => a+b, 0) / prevYValues.length);
       const prevMaxY = Math.max(...prevYValues);
 
-      const diffAvgX = (parseFloat(avgX) - parseFloat(prevAvgX)).toFixed(1);
+      const diffAvgX = Math.round((avgX - prevAvgX) * 10) / 10;
       const diffAvgY = avgY - prevAvgY;
       const diffMaxY = maxY - prevMaxY;
 
