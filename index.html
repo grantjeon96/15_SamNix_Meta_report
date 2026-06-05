@@ -938,11 +938,11 @@
 
       trendChartInstance.data.labels = tData.labels;
       
-      trendChartInstance.data.datasets[0].label = '영업이익 중간값 (조원)';
-      trendChartInstance.data.datasets[0].data = tData.medianOP;
+      trendChartInstance.data.datasets[0].label = '영업이익 평균값 (조원)';
+      trendChartInstance.data.datasets[0].data = tData.avgOP;
       
-      trendChartInstance.data.datasets[1].label = '목표가 중간값';
-      trendChartInstance.data.datasets[1].data = tData.medianTP;
+      trendChartInstance.data.datasets[1].label = '목표가 평균값';
+      trendChartInstance.data.datasets[1].data = tData.avgTP;
       
       trendChartInstance.data.datasets[2].label = '목표가 최고치';
       trendChartInstance.data.datasets[2].data = tData.maxTP;
@@ -965,7 +965,7 @@
           labels: [],
           datasets: [
             {
-              label: '영업이익 중간값 (조원)',
+              label: '영업이익 평균값 (조원)',
               data: [],
               yAxisID: 'yOP',
               borderColor: '#8b5cf6', // Purple for OP
@@ -977,7 +977,7 @@
               tension: 0.3
             },
             {
-              label: '목표가 중간값',
+              label: '목표가 평균값',
               data: [],
               yAxisID: 'yTP',
               borderColor: '#3b82f6', // Blue for TP Median
@@ -1094,15 +1094,15 @@
       samsung: {
         companyName: "삼성전자",
         labels: ['지난 주', '이번 주 (26년 6월 1주차)'],
-        medianOP: [369.7, 369.7],
-        medianTP: [480000, 500000],
+        avgOP: [303.5, 304.1],
+        avgTP: [435000, 437500],
         maxTP: [550000, 550000]
       },
       hynix: {
         companyName: "SK하이닉스",
         labels: ['지난 주', '이번 주 (26년 6월 1주차)'],
-        medianOP: [289.6, 289.6],
-        medianTP: [3800000, 3500000],
+        avgOP: [293.3, 293.8],
+        avgTP: [3229000, 3239000],
         maxTP: [3800000, 4000000]
       }
     };
@@ -1169,17 +1169,18 @@
       // Update Summary Cards
       const xValues = dataset.map(d => d.x);
       const yValues = dataset.map(d => d.y);
-      const medianX = xValues.sort((a,b) => a-b)[Math.floor(xValues.length/2)];
-      const medianY = yValues.sort((a,b) => a-b)[Math.floor(yValues.length/2)];
+      const avgX = (xValues.reduce((a,b) => a+b, 0) / xValues.length).toFixed(1);
+      const avgY = Math.round(yValues.reduce((a,b) => a+b, 0) / yValues.length);
       const maxY = Math.max(...yValues);
-      const prevXValues = dataset.map(d => d.prevX !== undefined ? d.prevX : d.x).sort((a,b) => a-b);
-      const prevYValues = dataset.map(d => d.prevY !== undefined ? d.prevY : d.y).sort((a,b) => a-b);
-      const prevMedianX = prevXValues[Math.floor(prevXValues.length/2)];
-      const prevMedianY = prevYValues[Math.floor(prevYValues.length/2)];
+      
+      const prevXValues = dataset.map(d => d.prevX !== undefined ? d.prevX : d.x);
+      const prevYValues = dataset.map(d => d.prevY !== undefined ? d.prevY : d.y);
+      const prevAvgX = (prevXValues.reduce((a,b) => a+b, 0) / prevXValues.length).toFixed(1);
+      const prevAvgY = Math.round(prevYValues.reduce((a,b) => a+b, 0) / prevYValues.length);
       const prevMaxY = Math.max(...prevYValues);
 
-      const diffMedianX = medianX - prevMedianX;
-      const diffMedianY = medianY - prevMedianY;
+      const diffAvgX = (parseFloat(avgX) - parseFloat(prevAvgX)).toFixed(1);
+      const diffAvgY = avgY - prevAvgY;
       const diffMaxY = maxY - prevMaxY;
 
       const getDiffHtml = (diff, isCurrency = false) => {
@@ -1193,12 +1194,12 @@
       const statsPanel = document.getElementById('stats-panel');
       statsPanel.innerHTML = `
         <div class="stat-card ${themeClass}">
-          <div class="stat-label">영업이익 중간값</div>
-          <div class="stat-value bold-value ${currentCompany === 'samsung' ? 'color-samsung' : 'color-hynix'}">${medianX}조원${getDiffHtml(diffMedianX)}</div>
+          <div class="stat-label">영업이익 평균값</div>
+          <div class="stat-value bold-value ${currentCompany === 'samsung' ? 'color-samsung' : 'color-hynix'}">${avgX}조원${getDiffHtml(diffAvgX)}</div>
         </div>
         <div class="stat-card ${themeClass}">
-          <div class="stat-label">목표가 중간값</div>
-          <div class="stat-value bold-value">${formatKRW(medianY)}${getDiffHtml(diffMedianY, true)}</div>
+          <div class="stat-label">목표가 평균값</div>
+          <div class="stat-value bold-value">${formatKRW(avgY)}${getDiffHtml(diffAvgY, true)}</div>
         </div>
         <div class="stat-card ${themeClass}">
           <div class="stat-label">목표가 최고치</div>
