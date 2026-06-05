@@ -749,6 +749,14 @@
         </ul>
       </div>
 
+      <!-- Trend Chart Section -->
+      <div class="glass-card" style="margin-top: 24px;">
+        <h2 class="section-title"><span></span>컨센서스 추이 시계열 그래프 (주간 업데이트)</h2>
+        <div class="chart-container" style="height: 400px;">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+
     </div>
 
     <!-- PAGE 2: TIMELINE HISTORICAL PAGE -->
@@ -918,14 +926,152 @@
           { brokerage: 'SK증권', date: '2026-06-01', x: 480.0, prevX: 460.0, y: 4000000, prevY: 3800000, reportName: '구조적 장기 호황 및 LTA 비중 확대', page: 1 },
           { brokerage: '미래에셋증권', date: '2026-05-25', x: 420.0, y: 3800000, reportName: 'HBM4 선도적 지위 견고', page: 4 },
           { brokerage: 'KB증권', date: '2026-05-28', x: 454.0, y: 3800000, reportName: 'AI 서버 수요 폭발, 공급 부족은 2028년까지', page: 3 },
-          { brokerage: '신한투자증권', date: '2026-05-20', x: 390.0, y: 3800000, reportName: '장기공급계약(LTA) 확대로 이익 변동성 하락', page: 5 },
-          { brokerage: '대신증권', date: '2026-05-18', x: 480.0, y: 3200000, reportName: '낸드 흑자 전환과 D램 마진 극대화', page: 3 },
           { brokerage: '한국투자증권', date: '2026-05-15', x: 290.0, y: 2050000, reportName: 'AI 인프라 성장에 따른 안정적 성장의 격', page: 6 },
           { brokerage: '노무라증권', date: '2026-05-11', x: 379.0, y: 2340000, reportName: 'Global Memory Cycle and Asia Tech Re-rating', page: 12 },
           { brokerage: 'SK증권', date: '2026-05-08', x: 320.0, y: 2500000, reportName: '가동률 회복과 HBM 시장 확대', page: 2 }
         ]
       }
     };
+
+    function updateTrendChart(tData) {
+      if (!trendChartInstance) return;
+
+      trendChartInstance.data.labels = tData.labels;
+      
+      trendChartInstance.data.datasets[0].label = '영업이익 중간값 (조원)';
+      trendChartInstance.data.datasets[0].data = tData.medianOP;
+      
+      trendChartInstance.data.datasets[1].label = '목표가 중간값';
+      trendChartInstance.data.datasets[1].data = tData.medianTP;
+      
+      trendChartInstance.data.datasets[2].label = '목표가 최고치';
+      trendChartInstance.data.datasets[2].data = tData.maxTP;
+
+      trendChartInstance.update();
+    }
+
+    function initTrendChart() {
+      if (trendChartInstance) {
+        updateTrendChart(dataConsensusTrend[currentCompany]);
+        return;
+      }
+
+      const ctx = document.getElementById('trendChart');
+      if (!ctx) return;
+      
+      trendChartInstance = new Chart(ctx.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: '영업이익 중간값 (조원)',
+              data: [],
+              yAxisID: 'yOP',
+              borderColor: '#8b5cf6', // Purple for OP
+              backgroundColor: '#8b5cf61a',
+              borderWidth: 3,
+              pointBackgroundColor: '#8b5cf6',
+              pointRadius: 4,
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: '목표가 중간값',
+              data: [],
+              yAxisID: 'yTP',
+              borderColor: '#3b82f6', // Blue for TP Median
+              backgroundColor: '#3b82f61a',
+              borderWidth: 3,
+              pointBackgroundColor: '#3b82f6',
+              pointRadius: 4,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: '목표가 최고치',
+              data: [],
+              yAxisID: 'yTP',
+              borderColor: '#10b981', // Green for TP Max
+              backgroundColor: '#10b9811a',
+              borderWidth: 3,
+              borderDash: [5, 5],
+              pointBackgroundColor: '#10b981',
+              pointRadius: 4,
+              fill: false,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              labels: { color: '#e5e7eb', font: { family: 'Pretendard', size: 13 } }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(17, 24, 39, 0.9)',
+              titleFont: { family: 'Pretendard', size: 14 },
+              bodyFont: { family: 'Pretendard', size: 13 },
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) { label += ': '; }
+                  if (context.dataset.yAxisID === 'yTP') {
+                    label += formatKRW(context.parsed.y);
+                  } else {
+                    label += context.parsed.y + '조원';
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: { color: '#9ca3af', font: { family: 'Pretendard' } }
+            },
+            yOP: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: '영업이익 (조원)',
+                color: '#8b5cf6',
+                font: { family: 'Pretendard', size: 12 }
+              },
+              grid: { drawOnChartArea: false }, // Only draw grid for one axis
+              ticks: { color: '#8b5cf6' }
+            },
+            yTP: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: {
+                display: true,
+                text: '목표가 (원)',
+                color: '#3b82f6',
+                font: { family: 'Pretendard', size: 12 }
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: {
+                color: '#3b82f6',
+                callback: function(value) { return value.toLocaleString(); }
+              }
+            }
+          }
+        }
+      });
+      
+      updateTrendChart(dataConsensusTrend[currentCompany]);
+    }
 
     const dataTimeline = {
       samsung: {
@@ -944,6 +1090,23 @@
       }
     };
 
+    const dataConsensusTrend = {
+      samsung: {
+        companyName: "삼성전자",
+        labels: ['2026-05-1주차', '2026-05-2주차', '2026-05-3주차', '2026-05-4주차', '2026-06-1주차'],
+        medianOP: [340.0, 345.0, 360.0, 370.0, 371.4],
+        medianTP: [450000, 460000, 480000, 480000, 500000],
+        maxTP: [500000, 530000, 530000, 550000, 550000]
+      },
+      hynix: {
+        companyName: "SK하이닉스",
+        labels: ['2026-05-1주차', '2026-05-2주차', '2026-05-3주차', '2026-05-4주차', '2026-06-1주차'],
+        medianOP: [260.0, 275.0, 280.0, 280.0, 284.9],
+        medianTP: [3000000, 3200000, 3500000, 3800000, 3800000],
+        maxTP: [3200000, 3500000, 3800000, 3800000, 4000000]
+      }
+    };
+
     // State Variables
     let currentCompany = 'samsung';
     let currentYear = '2026';
@@ -951,6 +1114,7 @@
 
     let scatterChartInstance = null;
     let timelineChartInstance = null;
+    let trendChartInstance = null;
 
     // Helper functions
     function formatKRW(val) {
@@ -964,7 +1128,10 @@
       if (page === 'scatter') {
         document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
         document.getElementById('page-scatter').classList.add('active');
-        setTimeout(initScatterChart, 50); // Give time for rendering
+        setTimeout(() => {
+          initScatterChart();
+          initTrendChart();
+        }, 50); // Give time for rendering
       } else if (page === 'timeline') {
         document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
         document.getElementById('page-timeline').classList.add('active');
@@ -1077,6 +1244,13 @@
 
       // Update Chart
       updateScatterChart(dataset, coData.companyName, coData.themeColor);
+      
+      // Update Trend Chart
+      if (trendChartInstance) {
+        updateTrendChart(dataConsensusTrend[currentCompany]);
+      } else {
+        initTrendChart();
+      }
     }
 
     function updateScatterChart(data, label, color) {
