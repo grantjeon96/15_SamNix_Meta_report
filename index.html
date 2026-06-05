@@ -1005,22 +1005,37 @@
       const medianX = xValues.sort((a,b) => a-b)[Math.floor(xValues.length/2)];
       const medianY = yValues.sort((a,b) => a-b)[Math.floor(yValues.length/2)];
       const maxY = Math.max(...yValues);
-      
+      const prevXValues = dataset.map(d => d.prevX !== undefined ? d.prevX : d.x).sort((a,b) => a-b);
+      const prevYValues = dataset.map(d => d.prevY !== undefined ? d.prevY : d.y).sort((a,b) => a-b);
+      const prevMedianX = prevXValues[Math.floor(prevXValues.length/2)];
+      const prevMedianY = prevYValues[Math.floor(prevYValues.length/2)];
+      const prevMaxY = Math.max(...prevYValues);
+
+      const diffMedianX = medianX - prevMedianX;
+      const diffMedianY = medianY - prevMedianY;
+      const diffMaxY = maxY - prevMaxY;
+
+      const getDiffHtml = (diff, isCurrency = false) => {
+        if (diff > 0) return ` <span style="color: #ef4444; font-size: 0.9rem;">(▲ ${isCurrency ? formatKRW(diff).replace('원','') : diff.toFixed(1)})</span>`;
+        if (diff < 0) return ` <span style="color: #3b82f6; font-size: 0.9rem;">(▼ ${isCurrency ? formatKRW(Math.abs(diff)).replace('원','') : Math.abs(diff).toFixed(1)})</span>`;
+        return ` <span style="color: #9ca3af; font-size: 0.9rem;">(-)</span>`;
+      };
+
       const themeClass = currentCompany === 'samsung' ? 'samsung-hover' : 'hynix-hover';
 
       const statsPanel = document.getElementById('stats-panel');
       statsPanel.innerHTML = `
         <div class="stat-card ${themeClass}">
           <div class="stat-label">영업이익 중간값</div>
-          <div class="stat-value bold-value ${currentCompany === 'samsung' ? 'color-samsung' : 'color-hynix'}">${medianX}조원</div>
+          <div class="stat-value bold-value ${currentCompany === 'samsung' ? 'color-samsung' : 'color-hynix'}">${medianX}조원${getDiffHtml(diffMedianX)}</div>
         </div>
         <div class="stat-card ${themeClass}">
           <div class="stat-label">목표가 중간값</div>
-          <div class="stat-value bold-value">${formatKRW(medianY)}</div>
+          <div class="stat-value bold-value">${formatKRW(medianY)}${getDiffHtml(diffMedianY, true)}</div>
         </div>
         <div class="stat-card ${themeClass}">
           <div class="stat-label">목표가 최고치</div>
-          <div class="stat-value bold-value" style="color: var(--accent-green)">${formatKRW(maxY)}</div>
+          <div class="stat-value bold-value" style="color: var(--accent-green)">${formatKRW(maxY)}${getDiffHtml(diffMaxY, true)}</div>
         </div>
       `;
 
