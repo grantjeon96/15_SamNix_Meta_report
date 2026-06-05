@@ -1047,8 +1047,14 @@
                 color: '#8b5cf6',
                 font: { family: 'Pretendard', size: 12 }
               },
-              grid: { drawOnChartArea: false }, // Only draw grid for one axis
-              ticks: { color: '#8b5cf6' }
+              grid: { drawOnChartArea: false },
+              ticks: {
+                color: '#8b5cf6',
+                stepSize: 5,
+                callback: function(value) { return value + '조'; }
+              },
+              suggestedMin: 280,
+              suggestedMax: 320
             },
             yTP: {
               type: 'linear',
